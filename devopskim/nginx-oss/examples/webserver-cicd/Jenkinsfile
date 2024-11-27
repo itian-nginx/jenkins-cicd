@@ -9,17 +9,19 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('checkout') {
             steps {
-                git branch: 'main', credentialsId: 'git-credential', url: 'https://github.com/itian-nginx/jenkins-cicd.git'
+                git branch: 'main', 
+                credentialsId: 'git-credential',
+                url: 'https://github.com/itian-nginx/jenkins-cicd.git'
             }
         }
-        stage('NGINX Conf Validate') {
+        stage('validate') {
             steps {
-                dir('devopskim/nginx-oss/examples/webserver-cicd') { // 작업 디렉토리를 devopskim/jenkins/로 변경
+                dir('devopskim/nginx-oss/examples/webserver-cicd') { // 작업 디렉토리 변경
                     sh '''
                     # Test NGINX configuration locally
-                    docker run -i -d -p 80:80 --name=test-nginx nginx nginx -g "daemon off;"
+                    docker run -i -d -p 2377:80 --name=test-nginx nginx nginx -g "daemon off;"
                     docker exec test-nginx mkdir /var/log/nginx/access
                     docker exec test-nginx mkdir /var/log/nginx/error
                     docker cp default.conf test-nginx:/etc/nginx/conf.d/default.conf
@@ -34,9 +36,9 @@ pipeline {
                 }
             }
         }
-        stage('Configuration Copy') {
+        stage('copy') {
             steps {
-                dir('devopskim/nginx-oss/examples/webserver-cicd') { // 작업 디렉토리를 devopskim/jenkins/로 변경
+                dir('devopskim/nginx-oss/examples/webserver-cicd') { // 작업 디렉토리 변경
                     sshagent(['itian-nginx1-ssh']) {
                         sh '''
                         scp -P ${SSH_PORT} -o StrictHostKeyChecking=no default.conf ${SSH_USER}@${NGINX_SERVER}:${DEPLOY_PATH}
@@ -46,7 +48,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('deploy') {
             steps {
                 sshagent(['itian-nginx1-ssh']) {
                     sh '''
