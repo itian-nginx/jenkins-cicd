@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', credentialsId: 'git-credential', url: 'https://github.com/itian-nginx/nginx-oss.git'
+                git branch: 'main', credentialsId: 'git-credential', url: 'https://github.com/itian-nginx/jenkins-cicd.git'
             }
         }
         stage('NGINX Conf Validate') {
