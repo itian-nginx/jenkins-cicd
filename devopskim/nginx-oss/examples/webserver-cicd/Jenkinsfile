@@ -36,7 +36,7 @@ pipeline {
         }
         stage('Configuration Copy') {
             steps {
-                dir('devopskim/jenkins') { // 작업 디렉토리를 devopskim/jenkins/로 변경
+                dir('devopskim/nginx-oss/examples/webserver-cicd') { // 작업 디렉토리를 devopskim/jenkins/로 변경
                     sshagent(['itian-nginx1-ssh']) {
                         sh '''
                         scp -P ${SSH_PORT} -o StrictHostKeyChecking=no default.conf ${SSH_USER}@${NGINX_SERVER}:${DEPLOY_PATH}
