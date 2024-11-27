@@ -1,2 +1,2 @@
 # jenkins-cicd
-NGINX API Management Jenkins 배포 스크립트 레포지토리입니다.
+Jenkins와 NGINX를 연동한 CI/CD 레포지토리입니다.
