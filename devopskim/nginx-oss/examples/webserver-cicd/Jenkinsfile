@@ -16,7 +16,7 @@ pipeline {
         }
         stage('NGINX Conf Validate') {
             steps {
-                dir('devopskim/jenkins') { // 작업 디렉토리를 devopskim/jenkins/로 변경
+                dir('devopskim/nginx-oss/examples/webserver-cicd') { // 작업 디렉토리를 devopskim/jenkins/로 변경
                     sh '''
                     # Test NGINX configuration locally
                     docker run -i -d -p 80:80 --name=test-nginx nginx nginx -g "daemon off;"
