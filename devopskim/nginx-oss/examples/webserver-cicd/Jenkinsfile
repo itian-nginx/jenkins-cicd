@@ -24,11 +24,14 @@ pipeline {
                     docker run -i -d -p 2377:80 --name=test-nginx nginx nginx -g "daemon off;"
                     docker exec test-nginx mkdir /var/log/nginx/access
                     docker exec test-nginx mkdir /var/log/nginx/error
+                    docker cp change-index.html test-nginx:/usr/share/nginx/html/
                     docker cp default.conf test-nginx:/etc/nginx/conf.d/default.conf
+                    docker exec test-nginx cat /usr/share/nginx/html/change-index.html
                     docker exec test-nginx cat /etc/nginx/conf.d/default.conf
 
                     # Validate configuration
                     docker exec test-nginx nginx -t || (docker rm -f test-nginx && exit 1)
+                    docker exec test-nginx curl localhost
 
                     # Clean up after validation
                     docker rm -f test-nginx
